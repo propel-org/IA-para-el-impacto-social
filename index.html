@@ -405,7 +405,7 @@ function renderPanel(k){
       <div class="sv" style="font-size:clamp(26px,2.4vw,36px);color:var(--o1);">${fmt(d.o_cap)}</div>
     </div>
     <div class="sec-lbl" style="margin-top:4px;">Tipo de organización asistente</div>
-    <div class="mod">${Object.entries(d.sector).filter(([l,v])=>v>0).map(([l,v])=>{const p=Math.round(v/st*100);return`<div class="br"><div class="bm"><span>${l}</span><span class="bp">${v}</span></div><div class="mb"><div class="mf" style="width:${p}%"></div></div></div>`;
+    <div class="mod">${['ONG / Fundación','Empresa privada','Entidad pública','Centro educativo','Otro'].map(l=>{const v=d.sector[l]||0;const p=Math.round(v/st*100);return`<div class="br"><div class="bm"><span>${l}</span><span class="bp">${v}</span></div><div class="mb"><div class="mf" style="width:${p}%"></div></div></div>`;
     }).join('')}</div>
     <div class="sec-lbl" style="margin-top:4px;">Aliados del evento</div>
     <div class="chips">${chips}</div>
