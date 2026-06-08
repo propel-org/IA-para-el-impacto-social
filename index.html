@@ -16,6 +16,7 @@
   --bd:rgba(6,51,48,.09);--bd2:rgba(6,51,48,.18);
   --r:5px;
 }
+*:focus{outline:none}
 html,body{height:100%;width:100%;background:var(--bg);font-family:'Libre Franklin',sans-serif;color:var(--t1);overflow:hidden}
 
 /* HEADER */
@@ -98,6 +99,58 @@ html,body{height:100%;width:100%;background:var(--bg);font-family:'Libre Frankli
 .chips{display:flex;flex-wrap:wrap;gap:6px}
 .chip{font-size:11px;color:var(--t2);background:var(--card);border:.5px solid var(--bd);padding:4px 10px;border-radius:20px;text-decoration:none;transition:border-color .13s,color .13s,background .13s}
 .chip:hover{border-color:var(--o1);color:var(--o1);background:rgba(242,99,34,.04)}
+
+/* ── MOBILE RESPONSIVE ── */
+@media (max-width: 768px) {
+  html,body { overflow:auto }
+
+  .app { height:auto; min-height:100vh }
+
+  /* Stack header vertically on small screens */
+  .hdr { height:auto; padding:14px 16px; flex-wrap:wrap; gap:10px }
+  .hdr-title { font-size:13px; order:-1; width:100% }
+  .hdr-brand { flex-direction:row; align-items:center; gap:12px }
+
+  /* Stack body vertically */
+  .body { grid-template-columns:1fr; overflow:visible; height:auto }
+
+  /* Left panel */
+  .left { padding:12px; gap:10px; overflow:visible }
+
+  /* KPIs: 1 column on very small, 3 on medium mobile */
+  .kpi-row { grid-template-columns:repeat(3,minmax(0,1fr)); gap:8px }
+  .kpi { padding:10px 12px }
+  .kpi-val { font-size:22px }
+
+  /* Map fixed height on mobile */
+  .map-wrap-outer { min-height:320px; height:50vw; max-height:400px }
+
+  /* Right panel full width below map */
+  .right { border-left:none; border-top:.5px solid var(--bd) }
+
+  /* Panel body no scroll constraint */
+  .p-body { overflow:visible; flex:none }
+
+  /* Tabs */
+  .tabs { padding:8px 12px }
+  .tab { padding:8px 4px }
+  .tab-flag { font-size:18px }
+  .tab-name { font-size:11px }
+
+  /* Stat grids */
+  .sg { grid-template-columns:1fr 1fr; gap:6px }
+  .sv { font-size:20px }
+
+  /* Bubbles slightly smaller */
+  .mtn { font-size:12px }
+  .mtl { font-size:7px }
+}
+
+@media (max-width: 480px) {
+  .kpi-row { grid-template-columns:1fr 1fr; gap:6px }
+  .kpi-val { font-size:20px }
+  .hdr-title { font-size:12px }
+}
 </style>
 </head>
 <body>
@@ -236,7 +289,7 @@ html,body{height:100%;width:100%;background:var(--bg);font-family:'Libre Frankli
   <div class="left">
     <div class="kpi-row">
       <div class="kpi"><div class="kpi-lbl">Orgs registradas</div><div class="kpi-val">599</div><div class="kpi-sub">3 países</div></div>
-      <div class="kpi"><div class="kpi-lbl">Orgs asistentes</div><div class="kpi-val">229</div><div class="kpi-sub">3 países</div></div>
+      <div class="kpi"><div class="kpi-lbl">Orgs asistentes</div><div class="kpi-val">230</div><div class="kpi-sub">3 países</div></div>
       <div class="kpi"><div class="kpi-lbl">Orgs capacitadas en IA</div><div class="kpi-val">187</div><div class="kpi-sub">3 países</div></div>
     </div>
 
@@ -284,11 +337,11 @@ html,body{height:100%;width:100%;background:var(--bg);font-family:'Libre Frankli
 <script>
 const DATA = {
   mx:{ name:'México', flag:'🇲🇽', event:'Casa Cemefi · CDMX · 12 feb 2026',
-       p_reg:197, p_att:70, o_reg:172, o_att:60, o_cap:53,
+       p_reg:197, p_att:70, o_reg:172, o_att:61, o_cap:53,
        partners:[
          {name:'Cemefi', url:'https://www.cemefi.org'}
        ],
-       sector:{'ONG / Fundación':41,'Empresa privada':11,'Entidad pública':5,'Centro educativo':4} },
+       sector:{'ONG / Fundación':40,'Empresa privada':11,'Entidad pública':5,'Centro educativo':4,'Otro':0} },
   ar:{ name:'Argentina', flag:'🇦🇷', event:'Fund. Navarro Viola · Buenos Aires · 27 may 2026',
        p_reg:205, p_att:71, o_reg:176, o_att:61, o_cap:52,
        partners:[
@@ -298,14 +351,14 @@ const DATA = {
          {name:'Potenciar Solidario', url:'https://www.potenciarsolidario.org'},
          {name:'GDFE', url:'https://gdfe.org.ar'}
        ],
-       sector:{'ONG / Fundación':33,'Empresa privada':6,'Entidad pública':2,'Centro educativo':2,'Independiente':1} },
+       sector:{'ONG / Fundación':45,'Empresa privada':10,'Entidad pública':3,'Centro educativo':2,'Otro':1} },
   cl:{ name:'Chile', flag:'🇨🇱', event:'Fund. Mustakis · Santiago · 5 jun 2026',
        p_reg:315, p_att:128, o_reg:251, o_att:108, o_cap:82,
        partners:[
          {name:'Fund. Mustakis', url:'https://www.fundacionmustakis.org'},
          {name:'Com. Org. Solidarias', url:'https://comunidad-org.cl'}
        ],
-       sector:{'ONG / Fundación':97,'Empresa privada':15,'Centro educativo':3,'Cooperativa social':1} }
+       sector:{'ONG / Fundación':77,'Empresa privada':14,'Entidad pública':0,'Centro educativo':2,'Otro':15} }
 };
 
 const PINS = {
@@ -352,7 +405,7 @@ function renderPanel(k){
       <div class="sv" style="font-size:clamp(26px,2.4vw,36px);color:var(--o1);">${fmt(d.o_cap)}</div>
     </div>
     <div class="sec-lbl" style="margin-top:4px;">Tipo de organización asistente</div>
-    <div class="mod">${Object.entries(d.sector).map(([l,v])=>{const p=Math.round(v/st*100);return`<div class="br"><div class="bm"><span>${l}</span><span class="bp">${v}</span></div><div class="mb"><div class="mf" style="width:${p}%"></div></div></div>`;
+    <div class="mod">${Object.entries(d.sector).filter(([l,v])=>v>0).map(([l,v])=>{const p=Math.round(v/st*100);return`<div class="br"><div class="bm"><span>${l}</span><span class="bp">${v}</span></div><div class="mb"><div class="mf" style="width:${p}%"></div></div></div>`;
     }).join('')}</div>
     <div class="sec-lbl" style="margin-top:4px;">Aliados del evento</div>
     <div class="chips">${chips}</div>
