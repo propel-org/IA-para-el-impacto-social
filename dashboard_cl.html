@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Propel — Evento: IA para el Impacto Social · Chile</title>
+<title>Propel — IA para el Impacto Social · Chile</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
@@ -19,83 +19,103 @@
 html,body{height:100%;width:100%;background:var(--bg);font-family:'Libre Franklin',sans-serif;color:var(--t1);overflow:hidden}
 
 /* HEADER */
-.hdr{height:96px;background:linear-gradient(108deg,var(--o1),var(--o2));display:flex;align-items:center;padding:0 32px;flex-shrink:0;gap:20px}
-.hdr-text{flex:1;display:flex;flex-direction:column;gap:10px}
-.hdr-tag{display:inline-flex;align-items:center;background:#fff;color:var(--o1);font-size:10px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;padding:3px 8px;border-radius:0;align-self:flex-start}
-.hdr-title{font-size:clamp(22px,2.4vw,32px);font-weight:300;color:#fff;letter-spacing:-.01em;line-height:1}
+.hdr{height:80px;background:linear-gradient(108deg,var(--o1),var(--o2));display:flex;align-items:center;padding:0 28px;flex-shrink:0;gap:20px}
+.hdr-text{flex:1;display:flex;flex-direction:column;gap:8px}
+.hdr-tag{display:inline-flex;align-items:center;background:#fff;color:var(--o1);font-size:9px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;padding:2px 7px;border-radius:0;align-self:flex-start}
+.hdr-title{font-size:clamp(20px,2.2vw,28px);font-weight:300;color:#fff;letter-spacing:-.01em;line-height:1}
 .hdr-title b{font-weight:500}
-.hdr-brand{display:flex;flex-direction:column;align-items:flex-end;gap:9px;flex-shrink:0}
+.hdr-brand{display:flex;flex-direction:column;align-items:flex-end;gap:8px;flex-shrink:0}
 
 /* SHELL */
 .app{display:flex;flex-direction:column;height:100vh;width:100vw}
-.body{flex:1;display:grid;grid-template-columns:1fr 440px;overflow:hidden;min-height:0}
 
-/* LEFT: MAP */
-.left{display:flex;flex-direction:column;overflow:hidden;min-height:0;background:var(--card);border-right:.5px solid var(--bd)}
-.map-body{flex:1;position:relative;overflow:hidden;min-height:0}
+/* Split container */
+.split-wrap{flex:1;display:flex;overflow:hidden;min-height:0}
+
+/* Panels */
+.left{position:relative;overflow:hidden;background:var(--card);flex-shrink:0}
+.right{flex:1;display:flex;flex-direction:column;overflow:hidden;background:var(--card);min-width:0}
+
+/* Drag handle */
+.divider{
+  width:6px;
+  background:var(--bg);
+  border-left:.5px solid var(--bd);
+  border-right:.5px solid var(--bd);
+  cursor:col-resize;
+  flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  transition:background .15s;
+  user-select:none;
+  position:relative;
+}
+.divider:hover,.divider.dragging{background:var(--o1);border-color:var(--o1)}
+.divider::after{
+  content:'';
+  width:2px;height:32px;
+  background:rgba(255,255,255,.5);
+  border-radius:2px;
+}
+
+/* Map */
 #map-svg{position:absolute;top:0;left:0;width:100%;height:100%}
-
-/* Bubble */
 .map-tag{position:absolute;display:flex;flex-direction:column;align-items:center;transform:translate(-50%,-100%);pointer-events:none}
-.mtb{background:var(--o1);border-radius:6px;padding:6px 13px;display:flex;flex-direction:column;align-items:center;min-width:54px;box-shadow:0 2px 12px rgba(232,99,34,.4)}
-.mtn{font-family:'DM Mono',monospace;font-size:15px;font-weight:500;color:#fff;line-height:1}
+.mtb{background:var(--o1);border-radius:6px;padding:5px 12px;display:flex;flex-direction:column;align-items:center;min-width:52px;box-shadow:0 2px 12px rgba(232,99,34,.4)}
+.mtn{font-family:'DM Mono',monospace;font-size:14px;font-weight:500;color:#fff;line-height:1}
 .mtl{font-size:8px;color:rgba(255,255,255,.85);margin-top:2px;white-space:nowrap;font-family:'Libre Franklin',sans-serif;text-align:center}
-.mtt{width:0;height:0;border-left:6px solid transparent;border-right:6px solid transparent;border-top:8px solid var(--o1)}
+.mtt{width:0;height:0;border-left:6px solid transparent;border-right:6px solid transparent;border-top:7px solid var(--o1)}
 
-/* RIGHT */
-.right{display:flex;flex-direction:column;overflow:hidden;background:var(--card)}
-.p-hdr{padding:18px 22px 14px;flex-shrink:0;background:linear-gradient(108deg,var(--o1),var(--o2))}
-.p-country{display:flex;align-items:center;gap:10px;margin-bottom:4px}
-.p-flag{font-size:22px}
-.p-name{font-size:18px;font-weight:600;color:#fff;letter-spacing:-.01em}
-.p-event{font-size:11px;color:rgba(255,255,255,.65)}
-.p-body{flex:1;overflow-y:auto;padding:16px 20px;display:flex;flex-direction:column;gap:10px}
+/* Right panel */
+.p-hdr{padding:14px 20px 12px;flex-shrink:0;background:linear-gradient(108deg,var(--o1),var(--o2))}
+.p-country{display:flex;align-items:center;gap:8px;margin-bottom:3px}
+.p-flag{font-size:20px}
+.p-name{font-size:17px;font-weight:600;color:#fff;letter-spacing:-.01em}
+.p-event{font-size:10px;color:rgba(255,255,255,.65)}
+.p-body{flex:1;overflow-y:auto;padding:14px 18px;display:flex;flex-direction:column;gap:8px;min-height:0}
 .p-body::-webkit-scrollbar{width:3px}
 .p-body::-webkit-scrollbar-thumb{background:var(--bd2);border-radius:2px}
 
 /* Modules */
-.sec-lbl{font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--t3);padding:2px 0 4px}
-.sg{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.si{background:var(--mod);border-radius:var(--r);padding:11px 13px}
-.sl{font-size:9px;font-weight:600;color:var(--t2);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px}
-.sv{font-family:'DM Mono',monospace;font-size:clamp(20px,1.8vw,26px);font-weight:500;color:var(--t1);letter-spacing:-.02em;line-height:1}
-.si-hi{background:rgba(242,99,34,.08);border:.5px solid rgba(242,99,34,.3);border-radius:var(--r);padding:11px 13px}
-.mod{background:var(--mod);border-radius:var(--r);padding:11px 13px}
-.br{margin-bottom:8px}
-.bm{display:flex;justify-content:space-between;font-size:11px;color:var(--t2);margin-bottom:3px}
+.sec-lbl{font-size:9px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--t3);padding:1px 0 3px}
+.sg{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.si{background:var(--mod);border-radius:var(--r);padding:9px 12px}
+.sl{font-size:8px;font-weight:600;color:var(--t2);text-transform:uppercase;letter-spacing:.06em;margin-bottom:3px}
+.sv{font-family:'DM Mono',monospace;font-size:clamp(18px,1.6vw,24px);font-weight:500;color:var(--t1);letter-spacing:-.02em;line-height:1}
+.si-hi{background:rgba(242,99,34,.08);border:.5px solid rgba(242,99,34,.3);border-radius:var(--r);padding:9px 12px}
+.si-hi .sv{color:var(--o1);font-size:clamp(22px,2vw,30px)}
+.mod{background:var(--mod);border-radius:var(--r);padding:9px 12px}
+.br{margin-bottom:6px}
+.bm{display:flex;justify-content:space-between;font-size:10px;color:var(--t2);margin-bottom:3px}
 .bp{font-family:'DM Mono',monospace;font-weight:500;color:var(--t1)}
 .mb{height:4px;border-radius:3px;background:var(--bd);overflow:hidden}
 .mf{height:100%;border-radius:3px;background:var(--o1)}
-.chips{display:flex;flex-wrap:wrap;gap:6px}
-.chip{font-size:11px;color:var(--t2);background:var(--card);border:.5px solid var(--bd);padding:5px 11px;border-radius:20px;text-decoration:none;transition:border-color .13s,color .13s}
+.chips{display:flex;flex-wrap:wrap;gap:5px}
+.chip{font-size:10px;color:var(--t2);background:var(--card);border:.5px solid var(--bd);padding:4px 9px;border-radius:20px;text-decoration:none;transition:border-color .13s,color .13s}
 .chip:hover{border-color:var(--o1);color:var(--o1)}
 
 /* MOBILE */
 @media(max-width:768px){
   html,body{overflow:auto}
   .app{height:auto;min-height:100vh}
-  .hdr{height:auto;padding:16px;flex-wrap:wrap;gap:8px}
-  .hdr-title{font-size:22px}
-  .body{grid-template-columns:1fr;overflow:visible;height:auto;display:flex;flex-direction:column}
-  .left{order:2;height:55vw;min-height:260px;max-height:380px;border-right:none;border-top:.5px solid var(--bd)}
-  .right{order:1;overflow:visible}
+  .hdr{height:auto;padding:14px 16px;flex-wrap:wrap;gap:8px}
+  .hdr-title{font-size:20px}
+  .split-wrap{flex-direction:column;overflow:visible;height:auto;flex:none}
+  .divider{display:none}
+  .left{order:2;width:100% !important;height:65vw;min-height:260px;max-height:420px}
+  .right{order:1;flex:none;width:100% !important}
   .p-body{overflow:visible;flex:none}
-}
-@media(max-width:480px){
-  .sg{grid-template-columns:1fr 1fr;gap:6px}
-  .sv{font-size:18px}
 }
 </style>
 </head>
 <body>
 <div class="app">
-<div class="hdr">
-  <div class="hdr-text">
-    <span class="hdr-tag">EVENTO</span>
-    <div class="hdr-title">IA para el <b>impacto social</b></div>
-  </div>
-  <div class="hdr-brand">
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1505.03 509.58" style="height:32px;width:auto;display:block;">
+  <div class="hdr">
+    <div class="hdr-text">
+      <span class="hdr-tag">EVENTO</span>
+      <div class="hdr-title">IA para el <b>impacto social</b></div>
+    </div>
+    <div class="hdr-brand">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1505.03 509.58" style="height:30px;width:auto;display:block;">
   <defs>
     <style>
       .cls-1 {
@@ -117,7 +137,7 @@ html,body{height:100%;width:100%;background:var(--bg);font-family:'Libre Frankli
     <path class="cls-1" d="M692.67,302.69c0-20.74.05-41.48-.03-62.22-.03-4.54.82-7.97,5.85-9.57,27.14-8.65,54.57-12.06,82.85-6.17,7.07,1.47,9.15,4.82,7.71,11.37-1.23,5.56-2.65,11.1-3.44,16.72-1.07,7.58-5.17,8.68-12.1,7.76-9.67-1.28-19.51-1.26-29.29-1.79-6.94-.37-9.19,2.7-9.11,9.79.39,31.63.18,63.26.16,94.89,0,10.93-1.17,12.07-11.99,12.13-7.01.03-14.02-.08-21.03.03-6.83.09-9.75-2.93-9.67-9.93.24-21,.09-42,.09-63"/>
   </g>
 </svg>
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 137 50.7" style="height:24px;width:auto;display:block;">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 137 50.7" style="height:22px;width:auto;display:block;">
 <style type="text/css">
 	.st0{fill:#FFFFFF;}
 </style>
@@ -217,12 +237,12 @@ html,body{height:100%;width:100%;background:var(--bg);font-family:'Libre Frankli
 	</g>
 </g>
 </svg>
+    </div>
   </div>
-</div>
 
-<div class="body">
-  <div class="left">
-    <div class="map-body" id="map-body">
+  <div class="split-wrap" id="split-wrap">
+    <!-- MAP half -->
+    <div class="left" id="map-panel" style="width:50%">
       <svg id="map-svg" xmlns="http://www.w3.org/2000/svg">
         <defs>
           <radialGradient id="gr-ev" cx="50%" cy="50%" r="70%">
@@ -232,44 +252,41 @@ html,body{height:100%;width:100%;background:var(--bg);font-family:'Libre Frankli
         </defs>
       </svg>
     </div>
-  </div>
 
-  <div class="right">
-    <div class="p-hdr">
-      <div class="p-country">
-        <span class="p-flag">🇨🇱</span>
-        <span class="p-name">Chile</span>
+    <!-- Drag handle -->
+    <div class="divider" id="divider" title="Arrastra para ajustar"></div>
+
+    <!-- DATA half -->
+    <div class="right" id="data-panel">
+      <div class="p-hdr">
+        <div class="p-country"><span class="p-flag">🇨🇱</span><span class="p-name">Chile</span></div>
+        <div class="p-event">Fundación Mustakis · Santiago · 5 jun 2026</div>
       </div>
-      <div class="p-event">Fundación Mustakis · Santiago · 5 jun 2026</div>
-    </div>
-    <div class="p-body">
+      <div class="p-body">
 
-      <!-- ORGANIZACIONES -->
-      <div class="sec-lbl">Organizaciones</div>
-      <div class="sg">
-        <div class="si"><div class="sl">Registradas</div><div class="sv">251</div></div>
-        <div class="si"><div class="sl">Asistentes</div><div class="sv">108</div></div>
+        <div class="sec-lbl">Organizaciones</div>
+        <div class="sg">
+          <div class="si"><div class="sl">Registradas</div><div class="sv">251</div></div>
+          <div class="si"><div class="sl">Asistentes</div><div class="sv">108</div></div>
+        </div>
+        <div class="si-hi">
+          <div class="sl">Capacitadas en IA</div>
+          <div class="sv">82</div>
+        </div>
+
+        <div class="sec-lbl" style="margin-top:3px;">Personas</div>
+        <div class="sg">
+          <div class="si"><div class="sl">Registradas</div><div class="sv">315</div></div>
+          <div class="si"><div class="sl">Asistentes</div><div class="sv">128</div></div>
+        </div>
+
+        <div class="sec-lbl" style="margin-top:3px;">Tipo de organización asistente</div>
+        <div class="mod"><div class="br"><div class="bm"><span>ONG / Fundación</span><span class="bp">77</span></div><div class="mb"><div class="mf" style="width:71%"></div></div></div><div class="br"><div class="bm"><span>Empresa privada</span><span class="bp">14</span></div><div class="mb"><div class="mf" style="width:13%"></div></div></div><div class="br"><div class="bm"><span>Entidad pública</span><span class="bp">0</span></div><div class="mb"><div class="mf" style="width:0%"></div></div></div><div class="br"><div class="bm"><span>Centro educativo</span><span class="bp">2</span></div><div class="mb"><div class="mf" style="width:2%"></div></div></div><div class="br"><div class="bm"><span>Otro</span><span class="bp">15</span></div><div class="mb"><div class="mf" style="width:14%"></div></div></div></div>
+
+        <div class="sec-lbl" style="margin-top:3px;">Aliados del evento</div>
+        <div class="chips"><a class="chip" href="https://www.fundacionmustakis.org" target="_blank" rel="noopener">Fundación Mustakis</a><a class="chip" href="https://comunidad-org.cl" target="_blank" rel="noopener">Com. Org. Solidarias</a></div>
+
       </div>
-      <div class="si-hi">
-        <div class="sl">Capacitadas en IA</div>
-        <div style="font-family:'DM Mono',monospace;font-size:clamp(28px,2.8vw,40px);font-weight:500;color:var(--o1);letter-spacing:-.02em;line-height:1;">82</div>
-      </div>
-
-      <!-- PERSONAS -->
-      <div class="sec-lbl" style="margin-top:4px;">Personas</div>
-      <div class="sg">
-        <div class="si"><div class="sl">Registradas</div><div class="sv">315</div></div>
-        <div class="si"><div class="sl">Asistentes</div><div class="sv">128</div></div>
-      </div>
-
-      <!-- SECTOR -->
-      <div class="sec-lbl" style="margin-top:4px;">Tipo de organización asistente</div>
-      <div class="mod"><div class="br"><div class="bm"><span>ONG / Fundación</span><span class="bp">77</span></div><div class="mb"><div class="mf" style="width:71%"></div></div></div><div class="br"><div class="bm"><span>Empresa privada</span><span class="bp">14</span></div><div class="mb"><div class="mf" style="width:13%"></div></div></div><div class="br"><div class="bm"><span>Entidad pública</span><span class="bp">0</span></div><div class="mb"><div class="mf" style="width:0%"></div></div></div><div class="br"><div class="bm"><span>Centro educativo</span><span class="bp">2</span></div><div class="mb"><div class="mf" style="width:2%"></div></div></div><div class="br"><div class="bm"><span>Otro</span><span class="bp">15</span></div><div class="mb"><div class="mf" style="width:14%"></div></div></div></div>
-
-      <!-- ALIADOS -->
-      <div class="sec-lbl" style="margin-top:4px;">Aliados del evento</div>
-      <div class="chips"><a class="chip" href="https://www.fundacionmustakis.org" target="_blank" rel="noopener">Fundación Mustakis</a><a class="chip" href="https://comunidad-org.cl" target="_blank" rel="noopener">Com. Org. Solidarias</a></div>
-
     </div>
   </div>
 </div>
@@ -277,62 +294,106 @@ html,body{height:100%;width:100%;background:var(--bg);font-family:'Libre Frankli
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/3.0.2/topojson.min.js"></script>
 <script>
-const COUNTRY_ISO = '152';
-const COUNTRY_CAP = 82;
-const COUNTRY_LABEL = 'Orgs cap. en IA';
-const PIN = [-71.5, -35.5];
+const ISO = '152';
+const CAP = 82;
+const PIN = [-71.5,-35.5];
 const AMERICAS = new Set(['840','484','124','320','188','222','558','340','591','332','214','388','192','076','170','068','604','218','862','858','600','032','152','630','780','308','052','084','328','740','534','533','535','531','530','663','659','660','028','044','136','474','670','678','796']);
 
+// ── DRAG TO RESIZE ──
+const wrap     = document.getElementById('split-wrap');
+const mapPanel = document.getElementById('map-panel');
+const divider  = document.getElementById('divider');
+let dragging = false, startX, startW;
+
+divider.addEventListener('mousedown', e => {
+  dragging = true;
+  startX = e.clientX;
+  startW = mapPanel.offsetWidth;
+  divider.classList.add('dragging');
+  document.body.style.cursor = 'col-resize';
+  document.body.style.userSelect = 'none';
+});
+
+document.addEventListener('mousemove', e => {
+  if(!dragging) return;
+  const totalW = wrap.offsetWidth - divider.offsetWidth;
+  const newW = Math.min(Math.max(startW + (e.clientX - startX), totalW * 0.2), totalW * 0.8);
+  mapPanel.style.width = newW + 'px';
+  clearTimeout(rt);
+  rt = setTimeout(buildMap, 60);
+});
+
+document.addEventListener('mouseup', () => {
+  if(!dragging) return;
+  dragging = false;
+  divider.classList.remove('dragging');
+  document.body.style.cursor = '';
+  document.body.style.userSelect = '';
+  buildMap();
+});
+
+// Touch support
+divider.addEventListener('touchstart', e => {
+  startX = e.touches[0].clientX;
+  startW = mapPanel.offsetWidth;
+  divider.classList.add('dragging');
+}, {passive:true});
+
+document.addEventListener('touchmove', e => {
+  if(!divider.classList.contains('dragging')) return;
+  const totalW = wrap.offsetWidth - divider.offsetWidth;
+  const newW = Math.min(Math.max(startW + (e.touches[0].clientX - startX), totalW * 0.2), totalW * 0.8);
+  mapPanel.style.width = newW + 'px';
+}, {passive:true});
+
+document.addEventListener('touchend', () => {
+  divider.classList.remove('dragging');
+  buildMap();
+});
+
+// ── MAP ──
 function buildMap(){
-  const body = document.getElementById('map-body');
+  const body = document.getElementById('map-panel');
   const W = body.clientWidth, H = body.clientHeight;
   if(!W||!H) return;
-  const oldTag = body.querySelector('.map-tag');
-  if(oldTag) oldTag.remove();
+  const old = body.querySelector('.map-tag'); if(old) old.remove();
   const svgEl = document.getElementById('map-svg');
   const svg = d3.select(svgEl);
   svg.selectAll('g').remove();
-  svgEl.setAttribute('viewBox', `0 0 ${W} ${H}`);
-  const scale = Math.min(W,H) * 1.1;
-  const proj = d3.geoMercator().scale(scale).center([-71, -37]).translate([W*0.5,H*0.5]);
+  svgEl.setAttribute('viewBox',`0 0 ${W} ${H}`);
+  const scale = Math.min(W,H) * 0.55;
+  const proj = d3.geoMercator().scale(scale).center([-71,-37]).translate([W*0.5,H*0.5]);
   const pathG = d3.geoPath().projection(proj);
   const STEP = Math.max(3.5, Math.min(W,H)*0.007);
-  const DR = STEP*0.22, DRev = STEP*0.32;
+  const DR=STEP*0.22, DRev=STEP*0.32;
   d3.json('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json').then(world=>{
-    const feats = topojson.feature(world,world.objects.countries).features
+    const feats=topojson.feature(world,world.objects.countries).features
       .filter(f=>AMERICAS.has(String(f.id).padStart(3,'0')));
-    const canvas = document.createElement('canvas');
-    canvas.width=W; canvas.height=H;
-    const ctx = canvas.getContext('2d');
-    const dotsBg=[], dotsEv=[];
+    const canvas=document.createElement('canvas'); canvas.width=W; canvas.height=H;
+    const ctx=canvas.getContext('2d');
+    const bg=[],ev=[];
     feats.forEach(f=>{
-      const id3 = String(f.id).padStart(3,'0');
-      const isEv = id3===COUNTRY_ISO;
+      const id3=String(f.id).padStart(3,'0');
       ctx.clearRect(0,0,W,H);
-      const p2d = new Path2D(pathG(f));
-      ctx.fill(p2d);
-      for(let x=STEP/2;x<W;x+=STEP)
-        for(let y=STEP/2;y<H;y+=STEP)
-          if(ctx.isPointInPath(p2d,x,y))
-            (isEv?dotsEv:dotsBg).push([x,y]);
+      const p2d=new Path2D(pathG(f)); ctx.fill(p2d);
+      for(let x=STEP/2;x<W;x+=STEP) for(let y=STEP/2;y<H;y+=STEP)
+        if(ctx.isPointInPath(p2d,x,y)) (id3===ISO?ev:bg).push([x,y]);
     });
-    svg.append('g').selectAll('circle').data(dotsBg).join('circle')
+    svg.append('g').selectAll('c').data(bg).join('circle')
       .attr('cx',d=>d[0]).attr('cy',d=>d[1]).attr('r',DR).attr('fill','#C8C0B8');
-    svg.append('g').selectAll('circle').data(dotsEv).join('circle')
+    svg.append('g').selectAll('c').data(ev).join('circle')
       .attr('cx',d=>d[0]).attr('cy',d=>d[1]).attr('r',DRev).attr('fill','url(#gr-ev)');
-    // Bubble with "orgs cap. en IA" label
-    const [px,py] = proj(PIN);
-    const tag = document.createElement('div');
-    tag.className = 'map-tag';
-    tag.style.left = px+'px';
-    tag.style.top = (py-6)+'px';
-    tag.innerHTML = `<div class="mtb"><span class="mtn">${COUNTRY_CAP}</span><span class="mtl">${COUNTRY_LABEL}</span></div><div class="mtt"></div>`;
+    const [px,py]=proj(PIN);
+    const tag=document.createElement('div');
+    tag.className='map-tag'; tag.style.left=px+'px'; tag.style.top=(py-6)+'px';
+    tag.innerHTML=`<div class="mtb"><span class="mtn">${CAP}</span><span class="mtl">Orgs cap. en IA</span></div><div class="mtt"></div>`;
     body.appendChild(tag);
   }).catch(()=>{});
 }
-window.addEventListener('load',()=>setTimeout(buildMap,80));
+
 let rt;
-new ResizeObserver(()=>{clearTimeout(rt);rt=setTimeout(buildMap,150);}).observe(document.getElementById('map-body'));
+window.addEventListener('load',()=>setTimeout(buildMap,80));
+new ResizeObserver(()=>{clearTimeout(rt);rt=setTimeout(buildMap,150);}).observe(document.getElementById('map-panel'));
 </script>
 </body>
 </html>
