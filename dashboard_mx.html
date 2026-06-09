@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Propel — Evento: IA para el Impacto Social · México</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+*:focus{outline:none}
+:root{
+  --o1:#F26322;--o2:#E8401A;
+  --bg:#F6F3F0;--card:#fff;--mod:#EEE9E5;
+  --t1:#063330;--t2:#4A6360;--t3:#8FAAA7;
+  --bd:rgba(6,51,48,.09);--bd2:rgba(6,51,48,.18);
+  --r:5px;
+}
+html,body{height:100%;width:100%;background:var(--bg);font-family:'Libre Franklin',sans-serif;color:var(--t1);overflow:hidden}
+
+/* HEADER */
+.hdr{height:96px;background:linear-gradient(108deg,var(--o1),var(--o2));display:flex;align-items:center;padding:0 32px;flex-shrink:0;gap:20px}
+.hdr-text{flex:1;display:flex;flex-direction:column;gap:10px}
+.hdr-tag{display:inline-flex;align-items:center;background:#fff;color:var(--o1);font-size:10px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;padding:3px 8px;border-radius:0;align-self:flex-start}
+.hdr-title{font-size:clamp(22px,2.4vw,32px);font-weight:300;color:#fff;letter-spacing:-.01em;line-height:1}
+.hdr-title b{font-weight:500}
+.hdr-brand{display:flex;flex-direction:column;align-items:flex-end;gap:9px;flex-shrink:0}
+
+/* SHELL */
+.app{display:flex;flex-direction:column;height:100vh;width:100vw}
+.body{flex:1;display:grid;grid-template-columns:1fr 440px;overflow:hidden;min-height:0}
+
+/* LEFT: MAP */
+.left{display:flex;flex-direction:column;overflow:hidden;min-height:0;background:var(--card);border-right:.5px solid var(--bd)}
+.map-body{flex:1;position:relative;overflow:hidden;min-height:0}
+#map-svg{position:absolute;top:0;left:0;width:100%;height:100%}
+
+/* Bubble */
+.map-tag{position:absolute;display:flex;flex-direction:column;align-items:center;transform:translate(-50%,-100%);pointer-events:none}
+.mtb{background:var(--o1);border-radius:6px;padding:6px 13px;display:flex;flex-direction:column;align-items:center;min-width:54px;box-shadow:0 2px 12px rgba(232,99,34,.4)}
+.mtn{font-family:'DM Mono',monospace;font-size:15px;font-weight:500;color:#fff;line-height:1}
+.mtl{font-size:8px;color:rgba(255,255,255,.85);margin-top:2px;white-space:nowrap;font-family:'Libre Franklin',sans-serif;text-align:center}
+.mtt{width:0;height:0;border-left:6px solid transparent;border-right:6px solid transparent;border-top:8px solid var(--o1)}
+
+/* RIGHT */
+.right{display:flex;flex-direction:column;overflow:hidden;background:var(--card)}
+.p-hdr{padding:18px 22px 14px;flex-shrink:0;background:linear-gradient(108deg,var(--o1),var(--o2))}
+.p-country{display:flex;align-items:center;gap:10px;margin-bottom:4px}
+.p-flag{font-size:22px}
+.p-name{font-size:18px;font-weight:600;color:#fff;letter-spacing:-.01em}
+.p-event{font-size:11px;color:rgba(255,255,255,.65)}
+.p-body{flex:1;overflow-y:auto;padding:16px 20px;display:flex;flex-direction:column;gap:10px}
+.p-body::-webkit-scrollbar{width:3px}
+.p-body::-webkit-scrollbar-thumb{background:var(--bd2);border-radius:2px}
+
+/* Modules */
+.sec-lbl{font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--t3);padding:2px 0 4px}
+.sg{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.si{background:var(--mod);border-radius:var(--r);padding:11px 13px}
+.sl{font-size:9px;font-weight:600;color:var(--t2);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px}
+.sv{font-family:'DM Mono',monospace;font-size:clamp(20px,1.8vw,26px);font-weight:500;color:var(--t1);letter-spacing:-.02em;line-height:1}
+.si-hi{background:rgba(242,99,34,.08);border:.5px solid rgba(242,99,34,.3);border-radius:var(--r);padding:11px 13px}
+.mod{background:var(--mod);border-radius:var(--r);padding:11px 13px}
+.br{margin-bottom:8px}
+.bm{display:flex;justify-content:space-between;font-size:11px;color:var(--t2);margin-bottom:3px}
+.bp{font-family:'DM Mono',monospace;font-weight:500;color:var(--t1)}
+.mb{height:4px;border-radius:3px;background:var(--bd);overflow:hidden}
+.mf{height:100%;border-radius:3px;background:var(--o1)}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font-size:11px;color:var(--t2);background:var(--card);border:.5px solid var(--bd);padding:5px 11px;border-radius:20px;text-decoration:none;transition:border-color .13s,color .13s}
+.chip:hover{border-color:var(--o1);color:var(--o1)}
+
+/* MOBILE */
+@media(max-width:768px){
+  html,body{overflow:auto}
+  .app{height:auto;min-height:100vh}
+  .hdr{height:auto;padding:16px;flex-wrap:wrap;gap:8px}
+  .hdr-title{font-size:22px}
+  .body{grid-template-columns:1fr;overflow:visible;height:auto;display:flex;flex-direction:column}
+  .left{order:2;height:55vw;min-height:260px;max-height:380px;border-right:none;border-top:.5px solid var(--bd)}
+  .right{order:1;overflow:visible}
+  .p-body{overflow:visible;flex:none}
+}
+@media(max-width:480px){
+  .sg{grid-template-columns:1fr 1fr;gap:6px}
+  .sv{font-size:18px}
+}
+</style>
+</head>
+<body>
+<div class="app">
+<div class="hdr">
+  <div class="hdr-text">
+    <span class="hdr-tag">EVENTO</span>
+    <div class="hdr-title">IA para el <b>impacto social</b></div>
+  </div>
+  <div class="hdr-brand">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1505.03 509.58" style="height:32px;width:auto;display:block;">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #fff;
+      }
+
+      .cls-2 {
+        fill: #ff693b;
+      }
+    </style>
+  </defs>
+  <path class="cls-2" d="M418.73,142.43c-12.57,13.91-25.16,27.81-37.71,41.73-75.81,84.09-151.61,168.2-227.47,252.24-2.12,2.35-4.68,4.73-7.53,5.89-5.45,2.23-11.36-1.65-12.18-7.51-.31-2.21-.2-4.48-.2-6.72-.01-68.13-.03-136.26,0-204.38.03-79.82,59.13-146.21,138.59-155.75,83.69-10.05,160.44,48.52,173.31,132.23,11.96,77.87-35.89,152.38-111.97,174.2-5.41,1.55-11.22,3.98-15.91-1.55-4.65-5.47-1.49-10.69.97-15.88,32.73-69.01,65.46-138.02,98.17-207.04,1.03-2.16,1.91-4.39,2.86-6.59-.3-.3-.61-.59-.92-.88"/>
+  <g>
+    <path class="cls-1" d="M557.91,271.4c15.56.29,30.6,1.6,44.99-4.48,9.99-4.22,13.75-12.29,14.18-22.59.43-10.53-2.32-19.64-12.38-24.42-15.05-7.16-30.87-6.52-46.79-4.19v55.69ZM557.35,310.9v50.39c0,14.04-.29,14.33-14.12,14.33-6.9,0-13.81-.02-20.71,0-5.8,0-9.04-2.32-9.03-8.71.08-59.12.06-118.26.02-177.38,0-4.65,1.28-8.29,6.37-8.93,32.3-4.08,64.72-7.19,96.7,1.55,44.49,12.18,62.04,65.85,33.47,101.6-11.21,14.03-27.18,19.96-44.06,22.59-15.57,2.42-31.43,3.02-48.63,4.55"/>
+    <path class="cls-1" d="M1020.43,258.48c0,26.05-.05,49.71.12,73.37,0,1.65,1.28,3.9,2.66,4.84,18.26,12.34,42.84,3.12,48.14-18.06,2.96-11.81,2.93-23.73-.35-35.45-3.84-13.68-12.4-22.89-27.02-24.55-7.48-.85-15.12-.15-23.54-.15M1020.42,371.04c0,15.1.03,29.3,0,43.51-.03,10.61-.56,11.11-11.41,11.14-7.16.03-14.33-.24-21.47.08-6.6.3-9.14-2.42-9.08-9,.2-22.2.07-44.4.07-66.6,0-36.49.19-72.99-.15-109.48-.08-7.65,2.64-11.05,9.98-12.39,23.18-4.21,46.37-8.05,69.94-3.79,31.98,5.76,53.17,28.19,56.87,60.62,2.21,19.46,1.25,38.74-7.34,56.92-13.69,28.94-43.95,41.3-77.71,31.75-2.87-.81-5.75-1.63-9.68-2.75"/>
+    <path class="cls-1" d="M1238.3,284.4c-.15-17.63-11.72-28.68-28.17-27.79-14.87.8-26.55,13.76-24.83,27.79h53ZM1184.13,313.44c.29,9.43,4.66,15.64,11.29,20.5,9.57,7.01,20.78,8.59,32.08,7.88,9.88-.62,19.76-2.37,29.45-4.48,6.03-1.3,8.82.75,9.86,6.19.95,5,1.55,10.07,2.37,15.11,1.65,10.05,1.28,11.1-8.2,13.53-22.51,5.77-45.26,8.35-68.17,2.58-28.91-7.27-47.33-28.53-51.15-58.13-3.73-29,.51-56.07,23.08-76.59,22.6-20.53,49.6-23.32,77.26-12.02,27.46,11.23,36.35,35.28,37.36,62.5,1.02,27.8,1.33,22.59-21.87,22.87-21.47.25-42.95.05-64.43.05h-8.93Z"/>
+    <path class="cls-1" d="M852.06,328.2c4.28,9.73,13.38,13.85,23.79,13.7,10.79-.16,19.09-5.15,23.71-15.19,7.99-17.38,8.04-35.13.69-52.55-4.24-10.07-12.46-15.82-23.93-16.08-11.64-.27-20.74,4.53-25.24,15.07-7.82,18.38-7.82,36.81.98,55.05M802.16,301.14c1.28-33.65,12.6-60.03,44-73.3,40.57-17.15,98.5,1.19,101.78,66.88,1.31,26.24-4.81,50.44-26.39,67.92-42.73,34.6-107.99,10.06-117.34-43.95-1.08-6.25-.91-8.72-2.05-17.54"/>
+    <path class="cls-1" d="M1349.86,236.13c0,26.02.15,52.04-.06,78.07-.11,13.27,2.04,24.48,17.78,27.77,1.82.38,3.99,5.15,3.83,7.75-.45,7.08-1.58,14.23-3.49,21.06-.64,2.28-4.76,5.5-6.79,5.18-10.97-1.72-22.31-3.1-32.52-7.11-13.41-5.26-18.61-17.49-19.81-31.25-.59-6.84-.6-13.76-.61-20.64-.05-43.88.05-87.76-.12-131.64-.03-6.28,1.72-11.23,6.08-15.8,7.38-7.76,14.03-16.22,21.61-23.78,2.25-2.25,6.94-3.88,9.77-3.1,2.07.57,4.11,5.53,4.14,8.55.31,28.31.19,56.64.19,84.95"/>
+    <path class="cls-1" d="M692.67,302.69c0-20.74.05-41.48-.03-62.22-.03-4.54.82-7.97,5.85-9.57,27.14-8.65,54.57-12.06,82.85-6.17,7.07,1.47,9.15,4.82,7.71,11.37-1.23,5.56-2.65,11.1-3.44,16.72-1.07,7.58-5.17,8.68-12.1,7.76-9.67-1.28-19.51-1.26-29.29-1.79-6.94-.37-9.19,2.7-9.11,9.79.39,31.63.18,63.26.16,94.89,0,10.93-1.17,12.07-11.99,12.13-7.01.03-14.02-.08-21.03.03-6.83.09-9.75-2.93-9.67-9.93.24-21,.09-42,.09-63"/>
+  </g>
+</svg>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 137 50.7" style="height:24px;width:auto;display:block;">
+<style type="text/css">
+	.st0{fill:#FFFFFF;}
+</style>
+<g>
+	<g>
+		<g>
+			<path class="st0" d="M96.5,42c0,0.5-0.2,1-0.5,1.3c-0.4,0.4-0.8,0.6-1.3,0.6c-0.5,0-1-0.2-1.3-0.6c-0.4-0.4-0.6-0.8-0.6-1.3
+				c0-0.5,0.2-1,0.6-1.3c0.4-0.4,0.8-0.5,1.3-0.5c0.5,0,1,0.2,1.3,0.5C96.3,41,96.5,41.5,96.5,42z"/>
+			<path class="st0" d="M98.1,37c0-2.1,0.7-3.8,2-5.2c1.3-1.4,3-2,5-2c2,0,3.7,0.7,5,2c1.3,1.4,2,3.1,2,5.2c0,2.1-0.7,3.8-2,5.2
+				c-1.3,1.4-3,2-5,2c-2,0-3.7-0.7-5-2C98.8,40.8,98.1,39.1,98.1,37z M100.7,37c0,1.5,0.4,2.6,1.3,3.5c0.8,0.9,1.9,1.4,3.2,1.4
+				c1.3,0,2.3-0.5,3.2-1.4c0.8-0.9,1.3-2.1,1.3-3.5c0-1.4-0.4-2.6-1.3-3.5c-0.9-0.9-1.9-1.4-3.2-1.4s-2.3,0.5-3.2,1.4
+				C101.1,34.4,100.7,35.5,100.7,37z"/>
+			<path class="st0" d="M116.8,43.7h-2.5V30.2h2.4v2.2h0.1c0.3-0.7,0.8-1.3,1.6-1.8c0.8-0.5,1.6-0.8,2.4-0.8c0.7,0,1.4,0.1,1.9,0.3
+				l-0.8,2.5c-0.3-0.1-0.8-0.2-1.5-0.2c-1,0-1.8,0.4-2.5,1.2c-0.7,0.8-1.1,1.7-1.1,2.7V43.7z"/>
+			<path class="st0" d="M129.7,50.2c-0.8,0-1.5-0.1-2.1-0.3c-0.7-0.2-1.3-0.5-1.8-0.8c-0.5-0.4-1-0.8-1.4-1.2
+				c-0.4-0.5-0.7-1-0.9-1.6l2.4-1c0.3,0.8,0.8,1.4,1.4,1.9c0.7,0.5,1.5,0.7,2.4,0.7c1.4,0,2.5-0.4,3.2-1.2c0.8-0.8,1.2-2,1.2-3.4
+				v-1.3H134c-0.5,0.7-1.1,1.3-2,1.7c-0.8,0.4-1.7,0.6-2.7,0.6c-1.8,0-3.3-0.7-4.6-2.1c-1.3-1.4-1.9-3.1-1.9-5.1s0.6-3.7,1.9-5.1
+				c1.3-1.4,2.8-2.1,4.6-2.1c1,0,1.9,0.2,2.7,0.6c0.8,0.4,1.5,1,2,1.7h0.1v-1.9h2.4v13c0,2.2-0.6,3.9-1.9,5.1
+				C133.4,49.5,131.7,50.2,129.7,50.2z M129.7,41.9c1.3,0,2.3-0.5,3.1-1.4c0.8-0.9,1.2-2.1,1.2-3.5c0-1.4-0.4-2.6-1.2-3.5
+				c-0.8-0.9-1.8-1.4-3.1-1.4c-1.2,0-2.2,0.5-3.1,1.4c-0.8,0.9-1.2,2.1-1.2,3.5c0,1.4,0.4,2.6,1.2,3.5
+				C127.5,41.4,128.5,41.9,129.7,41.9z"/>
+		</g>
+		<g>
+			<path class="st0" d="M11.9,44.2c-6.2,0-11.4-5-11.4-11.2c0-6.2,5.2-11.2,11.4-11.2c3.4,0,5.9,1.3,7.7,3.1L17.4,27
+				c-1.3-1.2-3.1-2.2-5.5-2.2c-4.5,0-8,3.6-8,8.2c0,4.5,3.5,8.2,8,8.2c2.9,0,4.6-1.2,5.7-2.2c0.9-0.9,1.5-2.1,1.7-3.9h-7.3V32h10.3
+				c0.1,0.5,0.2,1.2,0.2,1.9c0,2.3-0.6,5.1-2.7,7.2C17.7,43.1,15.2,44.2,11.9,44.2z"/>
+			<path class="st0" d="M38.3,37c0,4.2-3.2,7.2-7.1,7.2s-7.1-3.1-7.1-7.2c0-4.2,3.2-7.2,7.1-7.2S38.3,32.8,38.3,37z M35.2,37
+				c0-2.6-1.9-4.4-4-4.4s-4,1.8-4,4.4c0,2.6,1.9,4.4,4,4.4S35.2,39.5,35.2,37z"/>
+			<path class="st0" d="M54.3,37c0,4.2-3.2,7.2-7.1,7.2c-3.9,0-7.1-3.1-7.1-7.2c0-4.2,3.2-7.2,7.1-7.2C51.1,29.7,54.3,32.8,54.3,37z
+				 M51.2,37c0-2.6-1.9-4.4-4-4.4c-2.1,0-4,1.8-4,4.4c0,2.6,1.9,4.4,4,4.4C49.3,41.3,51.2,39.5,51.2,37z"/>
+			<path class="st0" d="M69.8,30.2v13c0,5.3-3.1,7.5-6.9,7.5c-3.5,0-5.6-2.4-6.4-4.3l2.8-1.1c0.5,1.2,1.7,2.6,3.6,2.6
+				c2.4,0,3.9-1.5,3.9-4.2v-1h-0.1c-0.7,0.9-2.1,1.6-3.8,1.6C59.3,44.2,56,41,56,37c0-4.1,3.3-7.3,6.9-7.3c1.7,0,3.1,0.8,3.8,1.6
+				h0.1v-1.2H69.8z M67.1,37c0-2.5-1.7-4.4-3.9-4.4c-2.2,0-4,1.9-4,4.4c0,2.5,1.8,4.4,4,4.4C65.4,41.3,67.1,39.5,67.1,37z"/>
+			<path class="st0" d="M75.4,22.5v21.2h-3.2V22.5H75.4z"/>
+			<path class="st0" d="M87.9,39.3l2.5,1.6c-0.8,1.2-2.7,3.2-6,3.2c-4.1,0-7.1-3.2-7.1-7.2c0-4.3,3-7.2,6.7-7.2c3.7,0,5.6,3,6.2,4.6
+				l0.3,0.8l-9.7,4c0.7,1.5,1.9,2.2,3.5,2.2C85.9,41.3,87.1,40.5,87.9,39.3z M80.3,36.7l6.5-2.7c-0.4-0.9-1.4-1.5-2.7-1.5
+				C82.5,32.5,80.2,34,80.3,36.7z"/>
+		</g>
+	</g>
+	<g>
+		<path class="st0" d="M0.6,4.1H2l2,6.5h0l2.1-6.5h1.4l2.1,6.5h0l2-6.5H13l-2.7,8.3H8.9L6.8,5.8l-2.1,6.6H3.3L0.6,4.1z"/>
+		<path class="st0" d="M14.2,2.3c-0.2-0.2-0.3-0.4-0.3-0.7c0-0.3,0.1-0.5,0.3-0.7c0.2-0.2,0.4-0.3,0.7-0.3c0.3,0,0.5,0.1,0.7,0.3
+			c0.2,0.2,0.3,0.4,0.3,0.7c0,0.3-0.1,0.5-0.3,0.7c-0.2,0.2-0.4,0.3-0.7,0.3C14.7,2.6,14.4,2.5,14.2,2.3z M14.2,4.1h1.4v8.3h-1.4
+			V4.1z"/>
+		<path class="st0" d="M19.9,12.5c-0.3-0.1-0.5-0.3-0.7-0.4c-0.2-0.2-0.4-0.5-0.5-0.7c-0.1-0.3-0.2-0.6-0.2-1V5.3h-1.4V4.1h1.4V1.8
+			H20v2.3h2v1.2h-2v4.6c0,0.5,0.1,0.8,0.3,1c0.2,0.2,0.5,0.4,0.9,0.4c0.3,0,0.6-0.1,0.9-0.3v1.3c-0.2,0.1-0.3,0.1-0.5,0.2
+			c-0.2,0-0.4,0-0.6,0C20.5,12.6,20.2,12.6,19.9,12.5z"/>
+		<path class="st0" d="M23.7,0.8h1.4v3.4L25,5.3h0.1c0.2-0.4,0.6-0.8,1.1-1.1c0.5-0.3,1-0.4,1.6-0.4c1,0,1.8,0.3,2.3,0.9
+			c0.5,0.6,0.8,1.4,0.8,2.3v5.3h-1.4V7.3c0-0.7-0.2-1.3-0.6-1.7c-0.4-0.4-0.9-0.5-1.5-0.5c-0.4,0-0.8,0.1-1.2,0.4
+			c-0.4,0.3-0.6,0.6-0.9,1s-0.3,0.8-0.3,1.3v4.6h-1.4V0.8z"/>
+		<path class="st0" d="M37.3,12c-0.6-0.4-1-0.9-1.3-1.6l1.2-0.6c0.2,0.5,0.5,0.9,0.9,1.2c0.4,0.3,0.9,0.4,1.3,0.4
+			c0.5,0,1-0.1,1.3-0.3c0.4-0.2,0.6-0.5,0.6-0.9c0-0.3-0.1-0.6-0.4-0.8c-0.3-0.2-0.8-0.4-1.4-0.5l-1-0.3c-0.7-0.2-1.2-0.4-1.6-0.8
+			s-0.6-0.9-0.6-1.5c0-0.5,0.1-0.9,0.4-1.3c0.3-0.4,0.7-0.6,1.1-0.8c0.5-0.2,1-0.3,1.5-0.3c0.7,0,1.4,0.2,1.9,0.5
+			c0.6,0.3,1,0.8,1.2,1.3l-1.2,0.6c-0.4-0.7-1-1.1-2-1.1c-0.5,0-0.9,0.1-1.2,0.3c-0.3,0.2-0.5,0.5-0.5,0.8c0,0.3,0.1,0.5,0.4,0.7
+			c0.2,0.2,0.6,0.3,1.1,0.5l1.2,0.3c0.8,0.2,1.4,0.5,1.8,0.9c0.4,0.4,0.6,0.9,0.6,1.5c0,0.5-0.1,1-0.4,1.3c-0.3,0.4-0.7,0.7-1.2,0.9
+			c-0.5,0.2-1,0.3-1.7,0.3C38.6,12.6,37.9,12.4,37.3,12z"/>
+		<path class="st0" d="M45,11.7c-0.5-0.6-0.8-1.4-0.8-2.4V4.1h1.4v5c0,0.8,0.2,1.4,0.5,1.7c0.4,0.4,0.8,0.6,1.4,0.6
+			c0.5,0,0.9-0.1,1.2-0.4c0.4-0.2,0.6-0.6,0.8-1C49.9,9.6,50,9.2,50,8.8V4.1h1.4v8.3H50v-1.2H50c-0.2,0.4-0.6,0.8-1.1,1
+			c-0.5,0.3-1,0.4-1.6,0.4C46.3,12.6,45.5,12.3,45,11.7z"/>
+		<path class="st0" d="M53.3,4.1h1.3v1.2h0.1c0.2-0.4,0.6-0.8,1.1-1.1s1.1-0.4,1.7-0.4c0.7,0,1.4,0.2,2,0.6c0.6,0.4,1.1,0.9,1.4,1.6
+			c0.3,0.7,0.5,1.4,0.5,2.3c0,0.8-0.2,1.6-0.5,2.3c-0.3,0.7-0.8,1.2-1.4,1.6c-0.6,0.4-1.3,0.6-2,0.6c-0.6,0-1.2-0.1-1.7-0.4
+			c-0.5-0.3-0.9-0.6-1.1-1h-0.1l0.1,1.1v3.6h-1.4V4.1z M58.7,11c0.4-0.3,0.8-0.6,1-1.1s0.4-1,0.4-1.6c0-0.6-0.1-1.2-0.4-1.6
+			s-0.6-0.9-1-1.1c-0.4-0.3-0.9-0.4-1.3-0.4c-0.5,0-0.9,0.1-1.3,0.4c-0.4,0.3-0.8,0.6-1,1.1s-0.4,1-0.4,1.7s0.1,1.2,0.4,1.7
+			c0.2,0.5,0.6,0.8,1,1.1c0.4,0.3,0.9,0.4,1.3,0.4C57.8,11.4,58.3,11.2,58.7,11z"/>
+		<path class="st0" d="M62.8,4.1h1.3v1.2h0.1c0.2-0.4,0.6-0.8,1.1-1.1C65.9,4,66.4,3.8,67,3.8c0.7,0,1.4,0.2,2,0.6
+			c0.6,0.4,1.1,0.9,1.4,1.6C70.8,6.6,71,7.4,71,8.2c0,0.8-0.2,1.6-0.5,2.3c-0.3,0.7-0.8,1.2-1.4,1.6c-0.6,0.4-1.3,0.6-2,0.6
+			c-0.6,0-1.2-0.1-1.7-0.4c-0.5-0.3-0.9-0.6-1.1-1h-0.1l0.1,1.1v3.6h-1.4V4.1z M68.2,11c0.4-0.3,0.8-0.6,1-1.1s0.4-1,0.4-1.6
+			c0-0.6-0.1-1.2-0.4-1.6s-0.6-0.9-1-1.1c-0.4-0.3-0.9-0.4-1.3-0.4c-0.5,0-0.9,0.1-1.3,0.4c-0.4,0.3-0.8,0.6-1,1.1
+			c-0.2,0.5-0.4,1-0.4,1.7s0.1,1.2,0.4,1.7c0.2,0.5,0.6,0.8,1,1.1c0.4,0.3,0.9,0.4,1.3,0.4C67.4,11.4,67.8,11.2,68.2,11z"/>
+		<path class="st0" d="M74.2,12c-0.6-0.4-1.2-0.9-1.5-1.6c-0.4-0.7-0.5-1.4-0.5-2.2s0.2-1.6,0.5-2.2c0.4-0.7,0.9-1.2,1.5-1.6
+			c0.6-0.4,1.4-0.6,2.2-0.6c0.8,0,1.5,0.2,2.2,0.6c0.6,0.4,1.2,0.9,1.5,1.6s0.5,1.4,0.5,2.2s-0.2,1.6-0.5,2.2
+			c-0.4,0.7-0.9,1.2-1.5,1.6c-0.6,0.4-1.4,0.6-2.2,0.6C75.6,12.6,74.9,12.4,74.2,12z M77.8,11c0.4-0.3,0.8-0.6,1.1-1.1
+			c0.3-0.5,0.4-1,0.4-1.7S79.2,7,78.9,6.6c-0.3-0.5-0.6-0.8-1.1-1.1c-0.4-0.3-0.9-0.4-1.4-0.4s-1,0.1-1.4,0.4
+			c-0.4,0.3-0.8,0.6-1.1,1.1c-0.3,0.5-0.4,1-0.4,1.7s0.1,1.2,0.4,1.7c0.3,0.5,0.6,0.8,1.1,1.1s0.9,0.4,1.4,0.4S77.4,11.2,77.8,11z"
+			/>
+		<path class="st0" d="M82.1,4.2h1.3v1.3h0.1c0.2-0.5,0.5-0.9,1-1.1C84.9,4.1,85.4,4,86,4c0.2,0,0.4,0,0.6,0v1.4
+			c-0.2,0-0.4-0.1-0.7-0.1c-0.7,0-1.3,0.2-1.7,0.7c-0.4,0.5-0.7,1.1-0.7,1.8v4.6h-1.4V4.2z M90.5,12.5c-0.3-0.1-0.5-0.3-0.7-0.4
+			c-0.2-0.2-0.4-0.5-0.5-0.7c-0.1-0.3-0.2-0.6-0.2-1V5.3h-1.4V4.1h1.4V1.8h1.4v2.3h2v1.2h-2v4.6c0,0.5,0.1,0.8,0.3,1
+			c0.2,0.2,0.5,0.4,0.9,0.4c0.3,0,0.6-0.1,0.9-0.3v1.3c-0.2,0.1-0.3,0.1-0.5,0.2c-0.2,0-0.4,0-0.6,0C91.1,12.6,90.8,12.6,90.5,12.5z
+			"/>
+		<path class="st0" d="M97.9,5.3h-1.5V4.1h1.5V3.2c0-0.5,0.1-1,0.4-1.4c0.2-0.4,0.6-0.7,1-0.9c0.4-0.2,0.8-0.3,1.3-0.3
+			c0.5,0,0.9,0.1,1.2,0.2v1.3c-0.2-0.1-0.4-0.1-0.6-0.2c-0.2,0-0.4-0.1-0.6-0.1c-0.4,0-0.7,0.1-0.9,0.4c-0.3,0.3-0.4,0.6-0.4,1.1
+			v0.7h2.1v1.2h-2.1v7h-1.4V5.3z"/>
+		<path class="st0" d="M103.1,4.1h1.3v1.3h0.1c0.2-0.5,0.5-0.8,0.9-1.1c0.5-0.3,1-0.5,1.5-0.5c0.4,0,0.7,0.1,1,0.2v1.5
+			c-0.3-0.2-0.7-0.3-1.2-0.3c-0.4,0-0.8,0.1-1.1,0.3c-0.3,0.2-0.6,0.5-0.8,0.9c-0.2,0.4-0.3,0.8-0.3,1.2v4.6h-1.4V4.1z"/>
+		<path class="st0" d="M110.3,12c-0.6-0.4-1.2-0.9-1.5-1.6c-0.4-0.7-0.5-1.4-0.5-2.2s0.2-1.6,0.5-2.2s0.9-1.2,1.5-1.6
+			c0.6-0.4,1.4-0.6,2.2-0.6c0.8,0,1.5,0.2,2.2,0.6c0.6,0.4,1.2,0.9,1.5,1.6s0.5,1.4,0.5,2.2s-0.2,1.6-0.5,2.2
+			c-0.4,0.7-0.9,1.2-1.5,1.6c-0.6,0.4-1.4,0.6-2.2,0.6C111.7,12.6,111,12.4,110.3,12z M113.9,11c0.4-0.3,0.8-0.6,1.1-1.1
+			c0.3-0.5,0.4-1,0.4-1.7S115.3,7,115,6.6c-0.3-0.5-0.6-0.8-1.1-1.1c-0.4-0.3-0.9-0.4-1.4-0.4c-0.5,0-1,0.1-1.4,0.4
+			c-0.4,0.3-0.8,0.6-1.1,1.1c-0.3,0.5-0.4,1-0.4,1.7s0.1,1.2,0.4,1.7c0.3,0.5,0.6,0.8,1.1,1.1s0.9,0.4,1.4,0.4
+			C113,11.4,113.5,11.2,113.9,11z"/>
+		<path class="st0" d="M118.2,4.1h1.3v1.2h0.1c0.2-0.4,0.6-0.8,1.1-1.1c0.5-0.3,1-0.4,1.5-0.4c0.6,0,1.1,0.1,1.6,0.4
+			c0.4,0.3,0.8,0.7,1,1.2c0.3-0.5,0.7-0.9,1.2-1.2c0.5-0.3,1-0.4,1.7-0.4c1,0,1.7,0.3,2.1,0.9c0.5,0.6,0.7,1.4,0.7,2.4v5.3h-1.4V7.3
+			c0-0.8-0.2-1.3-0.5-1.7c-0.3-0.3-0.8-0.5-1.4-0.5c-0.4,0-0.8,0.1-1.1,0.4c-0.3,0.2-0.6,0.6-0.8,1c-0.2,0.4-0.3,0.8-0.3,1.3v4.7
+			h-1.4V7.3c0-0.8-0.2-1.3-0.5-1.7s-0.8-0.5-1.4-0.5c-0.4,0-0.8,0.1-1.1,0.4c-0.3,0.2-0.6,0.6-0.8,1c-0.2,0.4-0.3,0.8-0.3,1.3v4.6
+			h-1.4V4.1z"/>
+	</g>
+</g>
+</svg>
+  </div>
+</div>
+
+<div class="body">
+  <div class="left">
+    <div class="map-body" id="map-body">
+      <svg id="map-svg" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <radialGradient id="gr-ev" cx="50%" cy="50%" r="70%">
+            <stop offset="0%" stop-color="#F26322"/>
+            <stop offset="100%" stop-color="#E8401A"/>
+          </radialGradient>
+        </defs>
+      </svg>
+    </div>
+  </div>
+
+  <div class="right">
+    <div class="p-hdr">
+      <div class="p-country">
+        <span class="p-flag">🇲🇽</span>
+        <span class="p-name">México</span>
+      </div>
+      <div class="p-event">Casa Cemefi · Ciudad de México · 12 feb 2026</div>
+    </div>
+    <div class="p-body">
+
+      <!-- ORGANIZACIONES -->
+      <div class="sec-lbl">Organizaciones</div>
+      <div class="sg">
+        <div class="si"><div class="sl">Registradas</div><div class="sv">172</div></div>
+        <div class="si"><div class="sl">Asistentes</div><div class="sv">60</div></div>
+      </div>
+      <div class="si-hi">
+        <div class="sl">Capacitadas en IA</div>
+        <div style="font-family:'DM Mono',monospace;font-size:clamp(28px,2.8vw,40px);font-weight:500;color:var(--o1);letter-spacing:-.02em;line-height:1;">53</div>
+      </div>
+
+      <!-- PERSONAS -->
+      <div class="sec-lbl" style="margin-top:4px;">Personas</div>
+      <div class="sg">
+        <div class="si"><div class="sl">Registradas</div><div class="sv">197</div></div>
+        <div class="si"><div class="sl">Asistentes</div><div class="sv">70</div></div>
+      </div>
+
+      <!-- SECTOR -->
+      <div class="sec-lbl" style="margin-top:4px;">Tipo de organización asistente</div>
+      <div class="mod"><div class="br"><div class="bm"><span>ONG / Fundación</span><span class="bp">40</span></div><div class="mb"><div class="mf" style="width:67%"></div></div></div><div class="br"><div class="bm"><span>Empresa privada</span><span class="bp">11</span></div><div class="mb"><div class="mf" style="width:18%"></div></div></div><div class="br"><div class="bm"><span>Entidad pública</span><span class="bp">5</span></div><div class="mb"><div class="mf" style="width:8%"></div></div></div><div class="br"><div class="bm"><span>Centro educativo</span><span class="bp">4</span></div><div class="mb"><div class="mf" style="width:7%"></div></div></div><div class="br"><div class="bm"><span>Otro</span><span class="bp">0</span></div><div class="mb"><div class="mf" style="width:0%"></div></div></div></div>
+
+      <!-- ALIADOS -->
+      <div class="sec-lbl" style="margin-top:4px;">Aliados del evento</div>
+      <div class="chips"><a class="chip" href="https://www.cemefi.org" target="_blank" rel="noopener">Cemefi</a></div>
+
+    </div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/3.0.2/topojson.min.js"></script>
+<script>
+const COUNTRY_ISO = '484';
+const COUNTRY_CAP = 53;
+const COUNTRY_LABEL = 'Orgs cap. en IA';
+const PIN = [-99.1, 19.4];
+const AMERICAS = new Set(['840','484','124','320','188','222','558','340','591','332','214','388','192','076','170','068','604','218','862','858','600','032','152','630','780','308','052','084','328','740','534','533','535','531','530','663','659','660','028','044','136','474','670','678','796']);
+
+function buildMap(){
+  const body = document.getElementById('map-body');
+  const W = body.clientWidth, H = body.clientHeight;
+  if(!W||!H) return;
+  const oldTag = body.querySelector('.map-tag');
+  if(oldTag) oldTag.remove();
+  const svgEl = document.getElementById('map-svg');
+  const svg = d3.select(svgEl);
+  svg.selectAll('g').remove();
+  svgEl.setAttribute('viewBox', `0 0 ${W} ${H}`);
+  const scale = Math.min(W,H) * 1.1;
+  const proj = d3.geoMercator().scale(scale).center([-102, 24]).translate([W*0.5,H*0.5]);
+  const pathG = d3.geoPath().projection(proj);
+  const STEP = Math.max(3.5, Math.min(W,H)*0.007);
+  const DR = STEP*0.22, DRev = STEP*0.32;
+  d3.json('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json').then(world=>{
+    const feats = topojson.feature(world,world.objects.countries).features
+      .filter(f=>AMERICAS.has(String(f.id).padStart(3,'0')));
+    const canvas = document.createElement('canvas');
+    canvas.width=W; canvas.height=H;
+    const ctx = canvas.getContext('2d');
+    const dotsBg=[], dotsEv=[];
+    feats.forEach(f=>{
+      const id3 = String(f.id).padStart(3,'0');
+      const isEv = id3===COUNTRY_ISO;
+      ctx.clearRect(0,0,W,H);
+      const p2d = new Path2D(pathG(f));
+      ctx.fill(p2d);
+      for(let x=STEP/2;x<W;x+=STEP)
+        for(let y=STEP/2;y<H;y+=STEP)
+          if(ctx.isPointInPath(p2d,x,y))
+            (isEv?dotsEv:dotsBg).push([x,y]);
+    });
+    svg.append('g').selectAll('circle').data(dotsBg).join('circle')
+      .attr('cx',d=>d[0]).attr('cy',d=>d[1]).attr('r',DR).attr('fill','#C8C0B8');
+    svg.append('g').selectAll('circle').data(dotsEv).join('circle')
+      .attr('cx',d=>d[0]).attr('cy',d=>d[1]).attr('r',DRev).attr('fill','url(#gr-ev)');
+    // Bubble with "orgs cap. en IA" label
+    const [px,py] = proj(PIN);
+    const tag = document.createElement('div');
+    tag.className = 'map-tag';
+    tag.style.left = px+'px';
+    tag.style.top = (py-6)+'px';
+    tag.innerHTML = `<div class="mtb"><span class="mtn">${COUNTRY_CAP}</span><span class="mtl">${COUNTRY_LABEL}</span></div><div class="mtt"></div>`;
+    body.appendChild(tag);
+  }).catch(()=>{});
+}
+window.addEventListener('load',()=>setTimeout(buildMap,80));
+let rt;
+new ResizeObserver(()=>{clearTimeout(rt);rt=setTimeout(buildMap,150);}).observe(document.getElementById('map-body'));
+</script>
+</body>
+</html>
